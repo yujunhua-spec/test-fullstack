@@ -1,65 +1,69 @@
-import Image from "next/image";
+// "use client" 告诉 Next.js：这是一个"客户端组件"。
+// 只有客户端组件才能使用 useState、事件处理（onClick）等浏览器交互能力。
+// 不写这行，用了 useState 就会报错。（默认情况下 Next.js 的组件是"服务端组件"。）
+"use client";
 
+// 从 React 导入 useState 这个 Hook，用来给组件添加"状态"。
+import { useState } from "react";
+
+// 这是页面组件。App Router 里，src/app/page.tsx 默认导出的函数就是首页（路由 "/"）。
 export default function Home() {
+  // useState(0) 声明一个状态，初始值是 0。
+  // 它返回一个数组：[当前值, 更新这个值的函数]。
+  // 这里用解构把它们命名为 count 和 setCount。
+  const [count, setCount] = useState(0);
+
+  // 组件必须返回要渲染的 JSX（看起来像 HTML，但其实是 JS）。
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="flex flex-1 flex-col items-center justify-center gap-8 bg-zinc-50 dark:bg-black">
+      {/* 标题 */}
+      <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+        我的第一个计数器
+      </h1>
+
+      {/* 把 count 显示出来。JSX 里用 {} 包裹的是 JS 表达式。 */}
+      <p className={`text-6xl font-mono tabular-nums ${count < 0 ? "text-red-500" : "text-blue-600" } dark:text-blue-400`}>
+        {count}
+      </p>
+
+      {/* 三个按钮：减一、归零、加一 */}
+      <div className="flex gap-4">
+        {/* onClick 绑定一个函数：点击时把 count 减 1。
+            写成 () => ... 的箭头函数，是为了"点击时才执行"，
+            而不是渲染时立刻执行。 */}
+        <button
+          onClick={() => setCount(count - 5)}
+          className="rounded-lg bg-zinc-200 px-5 py-2 text-lg font-medium text-zinc-800 transition hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+        >
+          − 5
+        </button>
+        <button
+          onClick={() => setCount(count - 1)}
+          className="rounded-lg bg-zinc-200 px-5 py-2 text-lg font-medium text-zinc-800 transition hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+        >
+          − 1
+        </button>
+
+        <button
+          onClick={() => setCount(0)}
+          className="rounded-lg bg-zinc-200 px-5 py-2 text-lg font-medium text-zinc-800 transition hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+        >
+          归零
+        </button>
+
+        <button
+          onClick={() => setCount(count + 1)}
+          className="rounded-lg bg-blue-600 px-5 py-2 text-lg font-medium text-white transition hover:bg-blue-700"
+        >
+          + 1
+        </button>
+        <button
+          onClick={() => setCount(count + 5)}
+          className="rounded-lg bg-blue-600 px-5 py-2 text-lg font-medium text-white transition hover:bg-blue-700"
+        >
+          + 5
+        </button>
+      </div>
     </div>
   );
 }

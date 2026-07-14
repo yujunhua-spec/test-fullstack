@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# fullstack
 
-## Getting Started
+一个用于学习 **React + Next.js** 全栈开发的练习项目。
 
-First, run the development server:
+技术栈：**Next.js 16（App Router）· TypeScript · Tailwind CSS · ESLint**
+
+## 快速开始
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev     # 启动开发服务器（默认 http://localhost:3000）
+npm run build   # 生产构建
+npm run start   # 运行生产构建
+npm run lint    # 代码检查
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+启动后打开 http://localhost:3000 ，修改 `src/app/page.tsx` 页面会自动热更新。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 目录结构
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/
+    layout.tsx     # 根布局（所有页面共享的外壳）
+    page.tsx       # 首页（路由 "/"）
+    globals.css    # 全局样式 + Tailwind 指令
+public/            # 静态资源（图片等）
+next.config.ts     # Next.js 配置
+tsconfig.json      # TypeScript 配置
+```
 
-## Learn More
+App Router 的核心约定：`app/` 下的文件夹即路由，文件夹里的 `page.tsx` 就是该路由的页面。
 
-To learn more about Next.js, take a look at the following resources:
+## 学习路线（边做边学）
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **改首页**：编辑 `src/app/page.tsx`，用 Tailwind class 调样式
+2. **加路由**：新建 `src/app/about/page.tsx`，访问 `/about`
+3. **动态路由**：`src/app/blog/[slug]/page.tsx`，用 `params` 取参数
+4. **服务端组件取数据**：在 `page.tsx` 里直接 `async` + `await fetch(...)`
+5. **客户端交互**：需要 `useState`/事件的组件顶部加 `"use client"`
+6. **Server Actions**：用 `"use server"` 处理表单提交与数据变更
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 官方文档
 
-## Deploy on Vercel
+- Next.js 文档：https://nextjs.org/docs
+- 交互式教程：https://nextjs.org/learn
+- React 文档：https://react.dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 部署
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+推荐一键部署到 [Vercel](https://vercel.com/new)（Next.js 官方平台）。
