@@ -4,6 +4,8 @@ import "./globals.css";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/dal";
 import { logout } from "@/app/login/actions";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,42 +34,47 @@ export default async function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <nav className="flex items-center gap-6 border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
-          <Link href="/" className="font-medium hover:text-blue-600">
-            首页
-          </Link>
-          <Link href="/todo" className="font-medium hover:text-blue-600">
-            待办清单
-          </Link>
-          <Link href="/notes" className="font-medium hover:text-blue-600">
-            留言板
-          </Link>
 
-          {/* 右侧：登录状态。ml-auto 把它推到最右边 */}
-          <div className="ml-auto flex items-center gap-3 text-sm">
-            {user ? (
-              <>
-                <span className="text-zinc-500">{user.email}</span>
-                {/* 登出是个 Server Action，用一个只有按钮的表单触发 */}
-                <form action={logout}>
-                  <button
-                    type="submit"
-                    className="rounded-lg border border-zinc-300 px-3 py-1 font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
-                  >
-                    登出
-                  </button>
-                </form>
-              </>
-            ) : (
-              <Link href="/login" className="font-medium hover:text-blue-600">
-                登录
-              </Link>
-            )}
-          </div>
-        </nav>
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <nav className="flex items-center gap-6 border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
+            <Link href="/" className="font-medium hover:text-blue-600">
+              首页
+            </Link>
+            <Link href="/todo" className="font-medium hover:text-blue-600">
+              待办清单
+            </Link>
+            <Link href="/notes" className="font-medium hover:text-blue-600">
+              留言板
+            </Link>
+
+            {/* 右侧：登录状态。ml-auto 把它推到最右边 */}
+            <div className="ml-auto flex items-center gap-3 text-sm">
+              <ThemeToggle />
+              {user ? (
+                <>
+                  <span className="text-zinc-500">{user.email}</span>
+                  {/* 登出是个 Server Action，用一个只有按钮的表单触发 */}
+                  <form action={logout}>
+                    <button
+                      type="submit"
+                      className="rounded-lg border border-zinc-300 px-3 py-1 font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                    >
+                      登出
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <Link href="/login" className="font-medium hover:text-blue-600">
+                  登录
+                </Link>
+              )}
+            </div>
+          </nav>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
