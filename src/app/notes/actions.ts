@@ -1,19 +1,19 @@
 "use server";
-import { z } from "zod";
 import { addNote, delNote, getNote } from "./data";
 import { revalidatePath } from "next/cache";
 import { verifySession } from "@/lib/dal";
-import { noteFormSchema, NoteFormValues } from "@/lib/validations";
+import {
+  noteFormSchema,
+  NoteFormValues,
+  NoteDelSchema,
+  NoteDelValues,
+} from "@/lib/validations";
 
 // 这个类型描述 Server Action 每次返回的"状态"：可能有错误，或成功。
 export type NoteFormState = {
   error?: string;
   success?: boolean;
 };
-
-const NoteDelSchema = z.object({
-  id: z.number().gt(0, "id 必须大于 0"),
-});
 
 export async function createNote(
   formData: NoteFormValues,
@@ -31,19 +31,18 @@ export async function createNote(
 }
 
 export async function deleteNote(
-  _prevState: NoteFormState,
-  formData: FormData,
+  formData: NoteDelValues,
 ): Promise<NoteFormState> {
   const user = await verifySession();
 
-  const result = NoteDelSchema.safeParse({ id: Number(formData.get("id")) });
-  if (!result.success) return { error: result.error.issues[0].message };
+  const result = NoteDelSchema.safeParse(formData);
+  if (!result.success) throw new Error(result.error.issues[0].message);
 
   // 鉴权：只能删自己的留言。这个检查必须在服务端做——
   // 因为 Server Action 可被直接 POST 调用，前端隐藏/不显示删除按钮拦不住恶意请求。
   const note = await getNote(result.data.id);
   if (!note || note.authorId !== user.id) {
-    return { error: "无权删除这条留言" };
+    throw new Error("无权删除这条留言");
   }
 
   await delNote(result.data.id);

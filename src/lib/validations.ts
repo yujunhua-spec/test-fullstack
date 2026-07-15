@@ -10,3 +10,9 @@ export const noteFormSchema = z.object({
 });
 
 export type NoteFormValues = z.infer<typeof noteFormSchema>;
+
+export const NoteDelSchema = z.object({
+  id: z.number().gt(0, "id 必须大于 0"),
+});
+
+export type NoteDelValues = z.infer<typeof NoteDelSchema>;
