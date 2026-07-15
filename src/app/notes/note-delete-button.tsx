@@ -2,27 +2,17 @@
 
 import { useState } from "react";
 import { deleteNote } from "./actions";
-import { NoteDelSchema, NoteDelValues } from "@/lib/validations";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Trash2 } from "lucide-react";
 
 export function NoteDeleteButton({ id }: { id: number}) {
-    const form = useForm<NoteDelValues>({
-        resolver: zodResolver(NoteDelSchema),
-        defaultValues: {
-            id: id
-        }
-    })
     const [open, setOpen] = useState(false);
     const [pending, setPending] = useState(false);
-    const onsubmit =  async (formdata: NoteDelValues) => {
+    const onsubmit =  async ({id} : {id: number}) => {
         try {
             setPending(true);
-            await deleteNote(formdata);
-            form.reset();
+            await deleteNote({id});
             toast.success("删除成功")
         } catch {
             toast.error("删除失败")
@@ -31,8 +21,7 @@ export function NoteDeleteButton({ id }: { id: number}) {
         }
     }
     return(
-        <form id={`delete-form-${id}`} onSubmit={form.handleSubmit(onsubmit)}>
-            <input type="hidden" id="id" {...form.register("id")} />
+        <>
             {/* AlertDialog: 删除确认对话框，防止误操作 */}
             <AlertDialog open={open} onOpenChange={setOpen}>
                 {/* 使用普通按钮作为触发器 */}
@@ -52,10 +41,10 @@ export function NoteDeleteButton({ id }: { id: number}) {
                     onClick={async (e) => {
                         e.preventDefault();
                         
-                        await form.handleSubmit(onsubmit)();
+                        await onsubmit({id});
                         setOpen(false);
                     }}
-                    disabled={pending || !form.formState.isValid}
+                    disabled={pending}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
                     {pending ? "删除中..." : "确认删除"}
@@ -63,7 +52,6 @@ export function NoteDeleteButton({ id }: { id: number}) {
                 </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </form>
-
+        </>
     )
 }
