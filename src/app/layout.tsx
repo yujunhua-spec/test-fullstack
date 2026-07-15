@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/dal";
 import { logout } from "@/app/login/actions";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -74,6 +75,7 @@ export default async function RootLayout({
             </div>
           </nav>
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

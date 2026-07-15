@@ -3,6 +3,7 @@ import { z } from "zod";
 import { addNote, delNote, getNote } from "./data";
 import { revalidatePath } from "next/cache";
 import { verifySession } from "@/lib/dal";
+import { noteFormSchema, NoteFormValues } from "@/lib/validations";
 
 // 这个类型描述 Server Action 每次返回的"状态"：可能有错误，或成功。
 export type NoteFormState = {
@@ -10,28 +11,18 @@ export type NoteFormState = {
   success?: boolean;
 };
 
-// 用 Zod 定义"合法的留言长什么样"：去掉首尾空格后，1~200 字。
-const NoteSchema = z.object({
-  text: z
-    .string()
-    .trim()
-    .min(1, "留言不能为空")
-    .max(200, "留言不能超过 200 字"),
-});
-
 const NoteDelSchema = z.object({
   id: z.number().gt(0, "id 必须大于 0"),
 });
 
 export async function createNote(
-  _prevState: NoteFormState,
-  formData: FormData,
+  formData: NoteFormValues,
 ): Promise<NoteFormState> {
   // 必须登录：没登录 verifySession 会直接重定向到 /login。
   const user = await verifySession();
 
-  const result = NoteSchema.safeParse({ text: formData.get("text") });
-  if (!result.success) return { error: result.error.issues[0].message };
+  const result = noteFormSchema.safeParse(formData);
+  if (!result.success) throw new Error(result.error.issues[0].message);
 
   // 用当前登录用户作为作者——作者身份来自服务端会话，不信任前端传来的值。
   await addNote(result.data.text, user.id);
