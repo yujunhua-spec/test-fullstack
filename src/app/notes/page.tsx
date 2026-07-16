@@ -1,5 +1,11 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import { getNotes } from "./data";
+
+export const meta: Metadata = {
+  title: "留言板",
+  description: "分享你的想法，与社区互动",
+};
 import { NoteForm } from "./note-form";
 import { NoteDeleteButton } from "./note-delete-button";
 import { getCurrentUser } from "@/lib/dal";
