@@ -1,4 +1,12 @@
+import { Metadata } from "next";
 import { AuthForms } from "./auth-forms";
+
+
+export const metadata: Metadata = {
+  title: "登录",
+  description: "登录或注册以继续使用",
+};
+
 
 export default function LoginPage() {
     return(

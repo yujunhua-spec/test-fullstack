@@ -1,0 +1,9 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin pages (if any)
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://test-fullstack-sable.vercel.app//sitemap.xml

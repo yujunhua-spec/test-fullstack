@@ -7,6 +7,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Metadata } from "next";
+
+
+export const meta: Metadata = {
+  title: "留言板",
+  description: "分享你的想法，与社区互动",
+};
+
 
 export default async function NotesPage() {
   // 并行取数据：留言列表 + 当前登录用户（没登录则为 null）。
