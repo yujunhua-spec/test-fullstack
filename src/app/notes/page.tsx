@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Metadata } from "next";
 
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: "留言板",
   description: "分享你的想法，与社区互动",
 };
