@@ -3,10 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 
 // Prisma 7 requires using a driver adapter for PostgreSQL
-const connectionString =
-  process.env.DATABASE_URL ||
-  "postgresql://neondb_owner:npg_V3mfAJg0GvhE@ep-nameless-union-atzfoieb.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require";
-
+const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 
